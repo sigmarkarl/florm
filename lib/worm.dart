@@ -36,8 +36,8 @@ class Worm {
 
   int score = 0;
 
-  HorizontalPanel hp = new HorizontalPanel();
-  TextBox scorebox = new TextBox();
+  //HorizontalPanel hp = HorizontalPanel();
+  //TextBox scorebox = TextBox();
 
   // ValueBox<Integer> scorebox = new ValueBox<Integer>();
 
@@ -94,7 +94,7 @@ class Worm {
 
     score = 0;
 
-    Canvas label = Canvas.createIfSupported();
+    /*Canvas label = Canvas.createIfSupported();
 
     label.setSize("18px", "18px");
     label.setCoordinateSpaceWidth(18);
@@ -114,7 +114,7 @@ class Worm {
     hp.add(label);
     hp.add(scorebox);
 
-    florm.hscore.add(hp);
+    florm.hscore.add(hp);*/
 
     xs = [];
     ys = [];
@@ -149,7 +149,7 @@ class Worm {
     xs.clear();
     ys.clear();
 
-    florm.hscore.remove(hp);
+    //florm.hscore.remove(hp);
     florm.worms.remove(this);
     if (florm.uid != "" &&
         florm.uid.isNotEmpty &&
@@ -160,7 +160,7 @@ class Worm {
                     florm.highwidth * florm.highheight)))) {
       // String name = fuids.get( Long.parseLong(uid) );
       if (florm.uid != florm.huid) {
-        sendMessage(huid, "You have been challenged in WebWorm", score, this);
+        // new sendMessage(huid, "You have been challenged in WebWorm", score, this);
       } else {
         String superpowers = "";
         if (florm.lorcon) {
@@ -195,12 +195,12 @@ class Worm {
     //if (timer != null && worms.size() == 0) timer.cancel();
   }
 
-  void setTarget(int x, int y) {
-    tx = x.toDouble();
-    ty = y.toDouble();
+  void setTarget(double x, double y) {
+    tx = x;
+    ty = y;
   }
 
-  void advance(Canvas context) {
+  void advance(Canvas context, double w, double h) {
     if (xs.isEmpty) {
       kill();
     } else {
@@ -251,8 +251,10 @@ class Worm {
 
         i = (i + 1) % l;
         if (xs.length < l) {
-          xs.add(i, x);
-          ys.add(i, y);
+          xs.length = l;
+          ys.length = l;
+          xs[i] = x;
+          ys[i] = y;
         } else {
           double tx = xs[i] = x;
           double ty = ys[i] = y;
@@ -276,16 +278,16 @@ class Worm {
           context.drawPath(path, paint);
 
           score++;
-          scorebox.setText(score.toString());
+          // new scorebox.setText(score.toString());
           l += d;
 
-          florm.setApple(context);
+          florm.setApple(context, w, h);
         }
 
-        ImageData id = context.getImageData(x, y, 1.0, 1.0);
-        int blue = id.getBlueAt(0, 0);
-        int red = id.getRedAt(0, 0);
-        int green = id.getGreenAt(0, 0);
+        // new ImageData id = context.getImageData(x, y, 1.0, 1.0);
+        int blue = 0; //id.getBlueAt(0, 0);
+        int red = 0; //id.getRedAt(0, 0);
+        int green = 0; //id.getGreenAt(0, 0);
 
         double wbound = florm.cv!.getLocalClipBounds().width;
         double hbound = florm.cv!.getLocalClipBounds().height;

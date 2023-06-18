@@ -1,0 +1,294 @@
+Button power = new Button("Superpowers");
+power.addClickHandler(new ClickHandler() {
+    @Override
+    public void onClick(ClickEvent event) {
+        if (uid == null || uid.length() == 0) {
+            DialogBox dbox = new DialogBox(true, true);
+            dbox.setText("Superpowers"); // ã‚¹ãƒ¼ãƒ‘ãƒ¼ãƒ‘ãƒ¯ãƒ¼");
+            dbox.addCloseHandler(new CloseHandler<PopupPanel>() {
+                @Override
+                public void onClose(CloseEvent<PopupPanel> event) {
+                    // pause =
+                }
+            });
+
+            HTML html = new HTML("You must be logged into facebook to enable Superpowers");
+            dbox.add(html);
+            dbox.center();
+        } else {
+            DialogBox dbox = new DialogBox(true, true);
+            dbox.setText("Superpowers"); // ã‚¹ãƒ¼ãƒ‘ãƒ¼ãƒ‘ãƒ¯ãƒ¼");
+
+            /*
+                * <form target="paypal"
+                * action="https://www.paypal.com/cgi-bin/webscr"
+                * method="post"> <input type="hidden" name="cmd"
+                * value="_s-xclick"> <input type="hidden"
+                * name="hosted_button_id" value="GTDHG7AXUUWWE"> <input
+                * type="image" src=
+                * "https://www.paypalobjects.com/en_US/i/btn/btn_cart_SM.gif"
+                * border="0" name="submit"
+                * alt="PayPal - The safer, easier way to pay online!"> <img
+                * alt="" border="0"
+                * src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+                * width="1" height="1"> </form>
+                * 
+                * <form target="paypal"
+                * action="https://www.paypal.com/cgi-bin/webscr"
+                * method="post"> <input type="hidden" name="cmd"
+                * value="_s-xclick"> <input type="hidden"
+                * name="hosted_button_id" value="5GSE569LBQRN4"> <input
+                * type="image" src=
+                * "https://www.paypalobjects.com/en_US/i/btn/btn_cart_SM.gif"
+                * border="0" name="submit"
+                * alt="PayPal - The safer, easier way to pay online!"> <img
+                * alt="" border="0"
+                * src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+                * width="1" height="1"> </form>
+                * 
+                * <form target="paypal"
+                * action="https://www.paypal.com/cgi-bin/webscr"
+                * method="post"> <input type="hidden" name="cmd"
+                * value="_s-xclick"> <input type="hidden"
+                * name="hosted_button_id" value="RZEJDBKH4VHJ2"> <input
+                * type="image" src=
+                * "https://www.paypalobjects.com/en_US/i/btn/btn_cart_SM.gif"
+                * border="0" name="submit"
+                * alt="PayPal - The safer, easier way to pay online!"> <img
+                * alt="" border="0"
+                * src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+                * width="1" height="1"> </form>
+                * 
+                * <form target="paypal"
+                * action="https://www.paypal.com/cgi-bin/webscr"
+                * method="post"> <input type="hidden" name="cmd"
+                * value="_s-xclick"> <input type="hidden"
+                * name="hosted_button_id" value="DGR8KG2HZVPVG"> <input
+                * type="image" src=
+                * "https://www.paypalobjects.com/en_US/i/btn/btn_cart_SM.gif"
+                * border="0" name="submit"
+                * alt="PayPal - The safer, easier way to pay online!"> <img
+                * alt="" border="0"
+                * src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+                * width="1" height="1"> </form>
+                * 
+                * <form target="paypal"
+                * action="https://www.paypal.com/cgi-bin/webscr"
+                * method="post"> <input type="hidden" name="cmd"
+                * value="_s-xclick"> <input type="hidden"
+                * name="hosted_button_id" value="X3LQBSTXA686A"> <input
+                * type="image" src=
+                * "https://www.paypalobjects.com/en_US/i/btn/btn_cart_SM.gif"
+                * border="0" name="submit"
+                * alt="PayPal - The safer, easier way to pay online!"> <img
+                * alt="" border="0"
+                * src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+                * width="1" height="1"> </form>
+                * 
+                * <form target="paypal"
+                * action="https://www.paypal.com/cgi-bin/webscr"
+                * method="post"> <input type="hidden" name="cmd"
+                * value="_s-xclick"> <input type="hidden"
+                * name="hosted_button_id" value="W8FC3N9EJBEQL"> <input
+                * type="image" src=
+                * "https://www.paypalobjects.com/en_US/i/btn/btn_cart_SM.gif"
+                * border="0" name="submit"
+                * alt="PayPal - The safer, easier way to pay online!"> <img
+                * alt="" border="0"
+                * src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+                * width="1" height="1"> </form>
+                * 
+                * <form target="paypal"
+                * action="https://www.paypal.com/cgi-bin/webscr"
+                * method="post"> <input type="hidden" name="cmd"
+                * value="_s-xclick"> <input type="hidden"
+                * name="hosted_button_id" value="CT6VST75J8Q6J"> <input
+                * type="image" src=
+                * "https://www.paypalobjects.com/en_US/i/btn/btn_cart_SM.gif"
+                * border="0" name="submit"
+                * alt="PayPal - The safer, easier way to pay online!"> <img
+                * alt="" border="0"
+                * src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+                * width="1" height="1"> </form>
+                * 
+                * <form target="paypal"
+                * action="https://www.paypal.com/cgi-bin/webscr"
+                * method="post"> <input type="hidden" name="cmd"
+                * value="_s-xclick"> <input type="hidden"
+                * name="hosted_button_id" value="CT6VST75J8Q6J"> <input
+                * type="image" src=
+                * "https://www.paypalobjects.com/en_US/i/btn/btn_cart_SM.gif"
+                * border="0" name="submit"
+                * alt="PayPal - The safer, easier way to pay online!"> <img
+                * alt="" border="0"
+                * src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+                * width="1" height="1"> </form>
+                * 
+                * 
+                * <form target="paypal"
+                * action="https://www.paypal.com/cgi-bin/webscr"
+                * method="post"> <input type="hidden" name="cmd"
+                * value="_s-xclick"> <input type="hidden"
+                * name="hosted_button_id" value="93ULNAMGHQ9VS"> <input
+                * type="image" src=
+                * "https://www.paypalobjects.com/en_US/i/btn/btn_cart_SM.gif"
+                * border="0" name="submit"
+                * alt="PayPal - The safer, easier way to pay online!"> <img
+                * alt="" border="0"
+                * src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+                * width="1" height="1"> </form>
+                */
+
+            ValueChangeHandler<Boolean> lorconHandler = new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(
+                        ValueChangeEvent<Boolean> event) {
+                    lorcon = event.getValue();
+                }
+            };
+
+            ValueChangeHandler<Boolean> quatelHandler = new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(
+                        ValueChangeEvent<Boolean> event) {
+                    quatel = event.getValue();
+                }
+            };
+
+            ValueChangeHandler<Boolean> criangHandler = new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(
+                        ValueChangeEvent<Boolean> event) {
+                    criang = event.getValue();
+                }
+            };
+
+            ValueChangeHandler<Boolean> deflecHandler = new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(
+                        ValueChangeEvent<Boolean> event) {
+                    deflec = event.getValue();
+                }
+            };
+
+            ValueChangeHandler<Boolean> dipillHandler = new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(
+                        ValueChangeEvent<Boolean> event) {
+                    dipill = event.getValue();
+                }
+            };
+
+            ValueChangeHandler<Boolean> extlifHandler = new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(
+                        ValueChangeEvent<Boolean> event) {
+                    extlif = event.getValue();
+                }
+            };
+
+            ValueChangeHandler<Boolean> luckHandler = new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(
+                        ValueChangeEvent<Boolean> event) {
+                    luck = event.getValue();
+                }
+            };
+
+            ValueChangeHandler<Boolean> mondesHandler = new ValueChangeHandler<Boolean>() {
+                @Override
+                public void onValueChange(
+                        ValueChangeEvent<Boolean> event) {
+                    mondes = event.getValue();
+
+                    adw = mondes ? 0 : 160;
+                    final Element ads = Document.get().getElementById(
+                            "ads");
+                    ads.getStyle().setDisplay(
+                            mondes ? Display.NONE : Display.BLOCK);
+
+                    resize(rp, Window.getClientWidth() - adw,
+                            Window.getClientHeight());
+                    // if( mondes = true ) popup.hide();
+                    // else popup.show();
+                }
+            };
+
+            FlexTable table = new FlexTable();
+            addSuperPower(
+                    table,
+                    lorconWidget,
+                    lorcon,
+                    "$5",
+                    "<b>Lorentz contraction</b><br>As a stationary observer watching your worm in a 4D wormkowski space, you experience a relativistic length contraction in the direction of the worm movement",
+                    0, "5GSE569LBQRN4", lorconHandler,
+                    powerset.contains("lorcon") ? "" : null);
+            addSuperPower(
+                    table,
+                    quatelWidget,
+                    quatel,
+                    "$4",
+                    "<b>Quantum teleportation</b><br>As your worm exists in information space it is subject to the law of entanglement-assisted teleportation resulting in the ability to travel through the walls",
+                    1, "RZEJDBKH4VHJ2", quatelHandler,
+                    powerset.contains("quatel") ? "" : null);
+            addSuperPower(
+                    table,
+                    criangWidget,
+                    criang,
+                    "$3",
+                    "<b>Critical angle</b><br>Your worm is able to make more steep turns",
+                    2, "DGR8KG2HZVPVG", criangHandler,
+                    powerset.contains("criang") ? "" : null);
+            addSuperPower(
+                    table,
+                    deflecWidget,
+                    deflec,
+                    "$3",
+                    "<b>Deflection</b><br>If the angle of impact is small enough, your worm will deflect from the walls",
+                    3, "X3LQBSTXA686A", deflecHandler, "");
+            addSuperPower(
+                    table,
+                    luckWidget,
+                    luck,
+                    "\$2",
+                    "<b>Luck</b><br>Like the apple that fell on Newtons head, the apples seem to fall closer to the mouth the worm, defying laws of statistics",
+                    4, "W8FC3N9EJBEQL", luckHandler,
+                    powerset.contains("luck") ? "" : "Out of stock");
+            addSuperPower(table, dipillWidget, dipill, "$6",
+                    "<b>Diet pill</b><br>Eat more, grow less!", 5,
+                    "CT6VST75J8Q6J", dipillHandler,
+                    powerset.contains("dipill") ? "" : null);
+            addSuperPower(
+                    table,
+                    extlifWidget,
+                    extlif,
+                    "\$1",
+                    "<b>Extra life</b><br>Get one chance of passing through if hitting a worm",
+                    6, "93ULNAMGHQ9VS", extlifHandler,
+                    powerset.contains("extlif") ? "" : null);
+            addSuperPower(
+                    table,
+                    mondesWidget,
+                    mondes,
+                    "\$1",
+                    "<b>Ad Monolith destroyer</b><br>If you could just get rid of the monolith from the film 2001: A Space Odyssey and make the film understandable. Besides, it probably just contained ads anyways",
+                    7, "GTDHG7AXUUWWE", mondesHandler,
+                    powerset.contains("mondes") ? "" : null);
+
+            if (mondesWidget instanceof Button) {
+                Button buyCredit = new Button("Buy credits");
+                buyCredit.addClickHandler(new ClickHandler() {
+                    @Override
+                    public void onClick(ClickEvent event) {
+                        fbBuy();
+                    }
+                });
+                table.setWidget(8, 0, buyCredit);
+            }
+            dbox.add(table);
+
+            currentDb = dbox;
+            dbox.center();
+        }
+    }
+});

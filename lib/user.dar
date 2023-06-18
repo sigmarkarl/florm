@@ -1,0 +1,389 @@
+Element loginButton() {
+		// <fb:login-button show-faces="true" width="200"
+		// max-rows="1"></fb:login-button>
+
+		/*
+		 * Element elem = Document.get().createElement("fb:login-button");
+		 * elem.setAttribute("width", "50"); //elem.setAttribute("show-faces",
+		 * "true"); elem.setAttribute("max-rows", "1");
+		 * //elem.setAttribute("perms",
+		 * "user_birthday,friends_birthday,user_relationships,friends_relationships"
+		 * ); elem.setId("fblogin");
+		 */
+
+		// <div class="fb-login-button" scope="email,user_checkins">
+
+		Element elem = Document.get().createElement("div");
+		elem.setAttribute("class", "fb-login-button");
+		// elem.setAttribute("scope", "user");
+
+		return elem;
+	}
+
+	void sendMessage(String fuids, String body, int score,
+			Worm worm) /*-{
+		var ths = this;
+
+		var requestCallback = function(response) {
+			if ($wnd.console)
+				$wnd.console.log(response);
+			if (response && response.request) {
+				ths.@org.simmi.client.Webworm::makeHighScore(ILorg/simmi/client/Webworm$Worm;)( score, worm );
+			} else {
+				ths.@org.simmi.client.Webworm::saveHighScore(ILorg/simmi/client/Webworm$Worm;Ljava/lang/String;Ljava/lang/String;)( score, worm, null, null );
+			}
+		}
+
+		$wnd.FB.ui({
+			method : 'apprequests',
+			message : body
+		}, requestCallback);
+	}-*/;
+
+	void fbParse() /*-{
+		if ($wnd.FB !== undefined) {
+			$wnd.FB.XFBML.parse();
+		}
+	}-*/;
+
+	void fbInit(String login) /*-{
+		var ths = this;
+
+		$wnd.fbAsyncInit = function() {
+			$wnd.FB.init({
+				appId : '215097581865564',
+				status : true,
+				cookie : true,
+				xfbml : true,
+				oauth : true
+			});
+
+			try {
+				$wnd.console.log("login null");
+				$wnd.FB
+						.getLoginStatus(function(response) {
+							$wnd.console.log("inside login response");
+							try {
+								$wnd.console.log(response.status);
+								if (response.status === 'connected') {
+									// the user is logged in and has authenticated your
+									// app, and response.authResponse supplies
+									// the user's ID, a valid access token, a signed
+									// request, and the time the access token 
+									// and signed request each expire
+									var uid = response.authResponse.userID;
+									var accessToken = response.authResponse.accessToken;
+									ths.@org.simmi.client.Webworm::setUserId(Ljava/lang/String;)( uid );
+									$wnd.FB.XFBML.parse();
+								} else if (response.status === 'not_authorized') {
+									// the user is logged in to Facebook, 
+									// but has not authenticated your app
+									ths.@org.simmi.client.Webworm::setUserId(Ljava/lang/String;)( "" );
+								} else {
+									// the user isn't logged in to Facebook.
+									ths.@org.simmi.client.Webworm::setUserId(Ljava/lang/String;)( "" );
+								}
+							} catch (e) {
+								$wnd.console.log("getLoginStatus error");
+								$wnd.console.log(e);
+							}
+						});
+			} catch (e) {
+				$wnd.console.log("gls error");
+				$wnd.console.log(e);
+			}
+		};
+	}-*/;
+
+	void ieSpec() /*-{
+		var s = this;
+		function whatKeyDown(evt) {
+			var keycode = evt.keyCode;
+			s.@org.simmi.client.Webworm::keyDown(I)( keycode );
+		}
+		function whatKeyUp(evt) {
+			var keycode = evt.keyCode;
+			s.@org.simmi.client.Webworm::keyUp(I)( keycode );
+		}
+		$wnd.addEventListener('keydown', whatKeyDown, true);
+		$wnd.addEventListener('keyup', whatKeyUp, true);
+	}-*/;
+
+	/*
+	 * if (response.session) { var uid = response.session.uid;
+	 * ths.@org.simmi.client.Webworm::setUserId(Ljava/lang/String;)( uid ); }
+	 * else { ths.@org.simmi.client.Webworm::setUserId(Ljava/lang/String;)( ""
+	 * ); } $wnd.FB.XFBML.parse();
+	 */
+
+	SimplePanel sp;
+	SimplePanel splus;
+	Element like;
+	Element plus;
+	Element login;
+
+	void setUserId(String val) {
+		uid = val;
+
+		NodeList<Node> childs = sp.getElement().getChildNodes();
+		for (int i = 0; i < childs.getLength(); i++) {
+			sp.getElement().removeChild(childs.getItem(i));
+		}
+
+		if (uid.length > 0)
+			sp.getElement().appendChild(like);
+		else
+			sp.getElement().appendChild(login);
+
+		if (uid.length > 0) {
+			getSuperPowers(uid, null);
+			sendListener(uid);
+		}
+
+		if (uid != null && uid.length > 0)
+			fetchMe();
+		else
+			drawStartMessage(cv.getContext2d());
+	}
+
+	void sendListener(String uid) /*-{
+		var ths = this;
+		$wnd.FB.Event
+				.subscribe(
+						'edge.create',
+						function(response) {
+							ths.@org.simmi.client.Webworm::getSuperPowers(Ljava/lang/String;Ljava/lang/String;)( uid, "criang" );
+						});
+
+		$wnd.FB.Event
+				.subscribe(
+						'comment.create',
+						function(response) {
+							ths.@org.simmi.client.Webworm::getSuperPowers(Ljava/lang/String;Ljava/lang/String;)( uid, "criang" );
+						});
+
+		$wnd.FB.Event
+				.subscribe(
+						'message.send',
+						function(response) {
+							$wnd.console.log("message sent " + uid);
+							ths.@org.simmi.client.Webworm::getSuperPowers(Ljava/lang/String;Ljava/lang/String;)( uid, "criang" );
+						});
+	}-*/;
+
+	var powerset = Set<String>();
+
+	/* new void getSuperPowers(final String uid, final String power) {
+		greetingService.greetServer(uid, power, new AsyncCallback<String>() {
+			void onSuccess(String result) {
+				Browser.getWindow().getConsole()
+						.log("powerset: " + result + " " + power + " " + uid);
+
+				String[] split = result.split("\t");
+				powerset = new HashSet<String>(Arrays.asList(split));
+
+				/*
+				 * if( powerset.contains("criang") ) criang = true; if(
+				 * powerset.contains("lorcon") ) lorcon = true; if(
+				 * powerset.contains("quatel") ) quatel = true; if(
+				 * powerset.contains("deflec") ) deflec = true; if(
+				 * powerset.contains("luck") ) luck = true; if(
+				 * powerset.contains("extlif") ) extlif = true; if(
+				 * powerset.contains("dipill") ) dipill = true;
+				 * 
+				 * console( criang + " uh " + lorcon );
+				 */
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+
+			}
+		});
+
+		// insertSuperPowers( new HashSet<String>( Arrays.asList( new String[]
+		// {power} ) ) );
+	}*/
+
+	/*
+	 * public void insertSuperPowers( Set<String> powers ) { greetingService. }
+	 */
+
+	void fbBuy() /*-{
+		var callback = function(data) {
+			return true;
+		};
+
+		var obj = {
+			method : 'pay',
+			action : 'buy_credits',
+		};
+		$wnd.FB.ui(obj, callback);
+	}-*/;
+
+	DialogBox currentDb;
+
+	void updatePowers(String str) {
+		if (str.contains("lorcon")) {
+			powerset.add("lorcon");
+			lorcon = true;
+		} else if (str.contains("quatel")) {
+			powerset.add("quatel");
+			quatel = true;
+		} else if (str.contains("mondes")) {
+			powerset.add("mondes");
+			mondes = true;
+		} else if (str.contains("criang")) {
+			powerset.add("criang");
+			criang = true;
+		} else if (str.contains("extlif")) {
+			powerset.add("extlif");
+			extlif = true;
+		} else if (str.contains("luck")) {
+			powerset.add("luck");
+			luck = true;
+		} else if (str.contains("dipill")) {
+			powerset.add("dipill");
+			dipill = true;
+		} else if (str.contains("deflec")) {
+			powerset.add("deflec");
+			deflec = true;
+		}
+
+		if (currentDb != null)
+			currentDb.hide();
+	}
+
+	void fbPay(String order_info) /*-{
+		var ths = this;
+		var callback = function(data) {
+			if (data['order_id']) {
+				$wnd.console.log(data);
+				ths.@org.simmi.client.Webworm::updatePowers(Ljava/lang/String;)( order_info );
+
+				return true;
+			} else {
+				return false;
+			}
+		};
+		// calling the API ...
+		var obj = {
+			method : 'pay',
+			order_info : order_info,
+			action : 'buy_item',
+			dev_purchase_params : {
+				'oscif' : true
+			}
+		};
+		$wnd.FB.ui(obj, callback);
+	}-*/;
+
+	void addSuperPower(FlexTable table, Widget form, bool selected,
+			String cost, String html, int row, String id,
+			ValueChangeHandler<Boolean> handler, String status) {
+		table.setHTML(row, 0, html);
+		table.setText(row, 1, cost);
+
+		if (status != null) {
+			if (status.length() > 0) {
+				table.setText(row, 2, status);
+			} else {
+				CheckBox check = new CheckBox();
+				check.setValue(selected);
+				check.addValueChangeHandler(handler);
+				table.setWidget(row, 2, check);
+			}
+		} else {
+			/*
+			 * FormPanel form = new FormPanel(); form.setAction(
+			 * "https://www.paypal.com/cgi-bin/webscr" ); form.setMethod(
+			 * FormPanel.METHOD_POST );
+			 * 
+			 * HorizontalPanel holder = new HorizontalPanel();
+			 * holder.setVerticalAlignment( HorizontalPanel.ALIGN_MIDDLE );
+			 * holder.setHorizontalAlignment( HorizontalPanel.ALIGN_CENTER );
+			 * 
+			 * Hidden cmd = new Hidden("cmd", "_s-xclick"); Hidden
+			 * hosted_button_id = new Hidden("hosted_button_id", id); Hidden
+			 * fbid = new Hidden("custom", uid); Hidden notifyurl = new
+			 * Hidden("notify_url", "http://webwormgame.appspot.com"); Image img
+			 * = new Image(
+			 * "https://www.paypalobjects.com/en_US/i/scr/pixel.gif" );
+			 * img.setAltText(""); img.setWidth("1"); img.setHeight("1");
+			 * 
+			 * InputElement iel = Document.get().createImageInputElement();
+			 * iel.setName("submit"); iel.setSrc(
+			 * "https://www.paypalobjects.com/en_US/i/btn/btn_cart_SM.gif" );
+			 * iel.setAlt( "PayPal - The safer, easier way to pay online!" );
+			 * 
+			 * SimplePanel imageinput = new SimplePanel();
+			 * imageinput.getElement().appendChild( iel );
+			 * 
+			 * holder.add( cmd ); holder.add( hosted_button_id ); holder.add(
+			 * fbid ); holder.add( notifyurl ); holder.add( imageinput );
+			 * holder.add( img );
+			 * 
+			 * form.add( holder );
+			 */
+			// SimplePanel sp = new SimplePanel();
+			// sp.getElement().appendChild( form );
+			table.setWidget(row, 2, form);
+
+			/*
+			 * Anchor pay = new Anchor("Credits"); pay.addClickHandler( new
+			 * ClickHandler() {
+			 * 
+			 * @Override public void onClick(ClickEvent event) { fbPay( "abc123"
+			 * ); } }); table.setWidget(row, 3, pay);
+			 */
+		}
+	}
+
+	void gplusgo() /*-{
+		$wnd.gapi.plusone.go();
+	}-*/;
+
+	void setGadsPars() /*-{
+		$wnd.google_ad_client = "ca-pub-7204381538404733";
+		$wnd.google_ad_slot = "9414308425";
+		$wnd.google_ad_width = 160;
+		$wnd.google_ad_height = 600;
+	}-*/;
+
+	void fetchMe() /*-{
+		var ths = this;
+		$wnd.FB
+				.api(
+						'/me',
+						function(response) {
+							ths.@org.simmi.client.Webworm::putFriend(Ljava/lang/String;Ljava/lang/String;)( response.id, response.name );
+							ths.@org.simmi.client.Webworm::fetchFriends()();
+						});
+	}-*/;
+
+	void fetchFriends() /*-{
+		var ths = this;
+		try {
+			$wnd.FB
+					.api(
+							'/me/friends',
+							function(response) {
+								for (i = 0; i < response.data.length; i++) {
+									var frd = response.data[i];
+									ths.@org.simmi.client.Webworm::putFriend(Ljava/lang/String;Ljava/lang/String;)( frd.id, frd.name );
+								}
+								ths.@org.simmi.client.Webworm::fetchHighScores()();
+							});
+		} catch (e) {
+			$wnd.console.log(e);
+		}
+	}-*/;
+
+	var fuids = Map<int, String>();
+
+	void putFriend(String uid, String name) {
+    int? fuid = int.tryParse(uid);
+		if (fuid.isDefinedAndNotNull) {
+      fuids[fuid!] = name;
+    }
+	}
