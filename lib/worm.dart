@@ -24,8 +24,8 @@ class Worm {
   String leftv = "";
   String rightv = "";
 
-  List<double> xs = [];
-  List<double> ys = [];
+  late List<double> xs = [];
+  late List<double> ys = [];
 
   int i = 0;
   int l = 0;
@@ -42,15 +42,13 @@ class Worm {
   // ValueBox<Integer> scorebox = new ValueBox<Integer>();
 
   Worm.withAngle(this.florm, this.c, this.left, this.right, this.leftv,
-      this.rightv, double angle) {
-    Worm(florm, c, left, right, leftv, rightv, angle, florm.lorcon,
-        florm.criang, florm.quatel, florm.dipill, florm.deflec, florm.extlif);
+      this.rightv, double angle, double w, double h) {
+    init(angle, florm.lorcon, florm.criang, florm.deflec, w, h);
   }
 
   Worm.construct(
       this.florm, this.c, this.left, this.right, this.leftv, this.rightv) {
-    Worm(florm, c, left, right, leftv, rightv, pi / 2.0, florm.lorcon,
-        florm.criang, florm.quatel, florm.dipill, florm.deflec, florm.extlif);
+    init(pi / 2.0, florm.lorcon, florm.criang, florm.dipill, 0, 0);
   }
 
   Worm(
@@ -66,7 +64,14 @@ class Worm {
       this.quatel,
       bool dipill,
       this.deflec,
-      this.extlif) {
+      this.extlif,
+      double w,
+      double h) {
+    init(angle, lorcon, criang, dipill, w, h);
+  }
+
+  void init(
+      double angle, bool lorcon, bool criang, bool dipill, double w, double h) {
     r = 5.0;
     l = 24;
     i = 0;
@@ -116,11 +121,11 @@ class Worm {
 
     florm.hscore.add(hp);*/
 
-    xs = [];
-    ys = [];
+    //xs = [];
+    //ys = [];
 
-    double w = florm.cv!.getLocalClipBounds().width;
-    double h = florm.cv!.getLocalClipBounds().height;
+    //double w = florm.cv!.getLocalClipBounds().width;
+    //double h = florm.cv!.getLocalClipBounds().height;
 
     double x;
     double y;
@@ -145,7 +150,7 @@ class Worm {
     ys.add(y);
   }
 
-  void kill() {
+  void kill(double w, double h) {
     xs.clear();
     ys.clear();
 
@@ -155,9 +160,7 @@ class Worm {
         florm.uid.isNotEmpty &&
         (score > florm.highscore ||
             (score == florm.highscore &&
-                (florm.cv!.getLocalClipBounds().width *
-                        florm.cv!.getLocalClipBounds().height <
-                    florm.highwidth * florm.highheight)))) {
+                (w * h < florm.highwidth * florm.highheight)))) {
       // String name = fuids.get( Long.parseLong(uid) );
       if (florm.uid != florm.huid) {
         // new sendMessage(huid, "You have been challenged in WebWorm", score, this);
@@ -200,9 +203,9 @@ class Worm {
     ty = y;
   }
 
-  void advance(Canvas context, double w, double h) {
+  bool advance(Canvas context, double w, double h) {
     if (xs.isEmpty) {
-      kill();
+      return true;
     } else {
       if (l < xs.length) {
         i = min(i, xs.length - 1);
@@ -251,13 +254,17 @@ class Worm {
 
         i = (i + 1) % l;
         if (xs.length < l) {
-          xs.length = l;
-          ys.length = l;
+          //xs.length = l;
+          //ys.length = l;
+          xs.insert(i, x);
+          ys.insert(i, y);
+          //xs[i] = x;
+          //ys[i] = y;
+        } else {
+          double tx = xs[i];
+          double ty = ys[i];
           xs[i] = x;
           ys[i] = y;
-        } else {
-          double tx = xs[i] = x;
-          double ty = ys[i] = y;
           draw(context, tx, ty, r + 2.0, Colors.black, Colors.black);
         }
 
@@ -289,8 +296,8 @@ class Worm {
         int red = 0; //id.getRedAt(0, 0);
         int green = 0; //id.getGreenAt(0, 0);
 
-        double wbound = florm.cv!.getLocalClipBounds().width;
-        double hbound = florm.cv!.getLocalClipBounds().height;
+        double wbound = w; //florm.cv!.getLocalClipBounds().width;
+        double hbound = h; //florm.cv!.getLocalClipBounds().height;
 
         if (x < 0 || y < 0 || x >= wbound || y >= hbound) {
           if (quatel) {
@@ -333,6 +340,7 @@ class Worm {
           draw(context, x, y, r, c, const Color(0x00111111));
         }
       }
+      return false;
     }
   }
 

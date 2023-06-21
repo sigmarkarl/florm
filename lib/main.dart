@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'florm.dart';
+import 'flormpainter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Worm',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -54,17 +56,29 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  var florm = Florm();
 
-  void _incrementCounter() {
+  AnimationController? animationController;
+  Duration? duration;
+
+  @override
+  void initState() {
+    super.initState();
+    duration = const Duration(milliseconds: 10000);
+    animationController = AnimationController(vsync: this, duration: duration);
+    //_waveColor = widget.waveColor ?? Colors.lightBlueAccent;
+    animationController!.repeat();
+  }
+
+  void _incrementWorm() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      florm.increment = true;
     });
   }
 
@@ -89,34 +103,136 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+        child: GestureDetector(
+          /*onHorizontalDragStart: (detail) {
+            _x = detail.globalPosition.dx;
+          },*/
+
+          /*onHorizontalDragStart: (details) {
+            dragX = details.localPosition.dx;
+            dragY = details.localPosition.dy;
+          },
+          //onPan
+          onHorizontalDragEnd: (details) {
+            var selectedNode =
+                treeDraw.findSelectedNode(treeDraw.getRoot(), dragX, dragY);
+            var y = details.primaryVelocity;
+            if (selectedNode != null && y != null) {
+              setState(() {
+                if (y.isNegative) {
+                  selectedNode.recursiveSwapNodes();
+                } else {
+                  selectedNode.swapNodes();
+                }
+              });
+            }
+          },*/
+
+          /*onScaleStart: (details) {
+            currenthchunk = treeDraw.hchunk;
+          },
+          onScaleUpdate: (details) {
+            //if (treeDraw.hchunk.isNaN) treeDraw.hchunk = 1.0;
+            //if (currenthchunk == 0.0) currenthchunk = treeDraw.hchunk;
+            //debugPrint(details.verticalScale.toString());
+            _incrementZoom(details.verticalScale);
+          },
+          onLongPressEnd: (details) {
+            var selectedNode =
+                treeDraw.findSelectedNode(treeDraw.getRoot(), dragX, dragY);
+            var pt = details.localPosition;
+            if (selectedNode != null) {
+              setState(() {
+                if ((dragY - pt.dy).isNegative) {
+                  selectedNode.recursiveSwapNodes();
+                } else {
+                  selectedNode.swapNodes();
+                }
+              });
+            }
+          },
+          onLongPressStart: (details) {
+            dragX = details.localPosition.dx;
+            dragY = details.localPosition.dy;
+          },*/
+
+          /*onHorizontalDragUpdate: (detail) {
+            setState(() {
+              _len -= detail.globalPosition.dx - _x;
+              _x = detail.globalPosition.dx;
+            });
+          },
+          onVerticalDragUpdate: (detail) {
+            setState(() {
+              _len += detail.globalPosition.dy - _y;
+              _y = detail.globalPosition.dy;
+            });
+          },*/
+
+          /*onDoubleTapDown: (details) {
+            setState(() {
+              var x = details.localPosition.dx;
+              var y = details.localPosition.dy;
+              var selectedNode =
+                  treeDraw.findSelectedNode(treeDraw.getRoot(), x, y);
+              if (selectedNode != null) {
+                treeDraw.pressroot == LongPressBehaviour.root
+                    ? treeDraw.setNode(selectedNode)
+                    : treeDraw.reroot(selectedNode);
+              }
+            });
+          },
+          onTapUp: (details) {
+            setState(() {
+              var x = details.localPosition.dx;
+              var y = details.localPosition.dy;
+              var selectedNode =
+                  treeDraw.findSelectedNode(treeDraw.getRoot(), x, y);
+              if (selectedNode != null) {
+                this.selectedNode = selectedNode;
+                treeDraw.selectRecursive(
+                    selectedNode, !selectedNode.isSelected());
+              }
+            });
+          },*/
+
+          /*onTap: () {
+            setState(() {
+              //var x = detail.globalPosition.x;
+              //var selectedNode = findSelectedNode(root, x, y);
+              //if (selectedNode != null) {
+              //  selectRecursive(selectedNode, !selectedNode.isSelected());
+              //}
+            });
+          },
+          child: DragTarget(
+            builder: (context, List<String> candidateData, rejectedData) {
+              return CustomPaint(
+                painter: TreePainter(treeDraw),
+                size: Size(1024, 1024),
+              );
+            },
+            onWillAccept: (data) {
+              return true;
+            },
+            onAccept: (data) {
+              var k = 0;
+            },
+          ),*/
+
+          child: AnimatedBuilder(
+            animation: animationController!,
+            builder: (BuildContext context, Widget? child) {
+              return CustomPaint(
+                painter: FlormPainter(florm),
+                size: const Size(1024, 1024),
+              );
+            },
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _incrementWorm,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.

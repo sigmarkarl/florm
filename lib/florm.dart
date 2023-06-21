@@ -1,5 +1,4 @@
 import 'dart:core';
-import 'dart:js_interop';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +21,8 @@ class Florm {
   //final GreetingServiceAsync greetingService = GWT
   //		.create(GreetingService.class);
 
+  Florm();
+
   int highscore = 0;
   String huid = "";
   String highscoreholder = "no one";
@@ -30,6 +31,7 @@ class Florm {
   double applex = 0;
   double appley = 0;
   double appler = 16.0;
+  bool increment = false;
 
   int setApple(Canvas context, double w, double h) {
     applex = Random.secure().nextDouble() * (w - appler * 2.0) + appler;
@@ -109,8 +111,8 @@ class Florm {
 
   void killall() {
     var tmpset = Set<Worm>.from(worms);
-    for (Worm w in tmpset) {
-      w.kill();
+    for (Worm worm in tmpset) {
+      worm.kill(w, h);
     }
     tmpset.clear();
   }
@@ -118,7 +120,9 @@ class Florm {
   int offset = 30;
   int adw = 160;
 
-  void updateCoordinates(Canvas context, bool init) {
+  void updateCoordinates(Canvas context, bool init, double ww, double hh) {
+    w = ww;
+    h = hh;
     if (init) {
       /*context.getCanvas().setWidth(w);
 			context.getCanvas().setHeight(h - offset);
@@ -216,9 +220,7 @@ class Florm {
 
   String uid = "";
 
-  void resize(double ww, double hh) {
-    w = ww;
-    h = hh;
+  void resize(Canvas cv, double ww, double hh) {
     //rp.setWidth("${w}px");
     //rp.setHeight("${h}px");
 
@@ -226,7 +228,7 @@ class Florm {
     // Window.getClientHeight() );
     // rp.setWidth( (w-100)+"px" );
     // rp.setHeight( (h-100)+"px" );
-    updateCoordinates(cv!, true);
+    updateCoordinates(cv, true, ww, hh);
 
     /*
 		 * if( popup != null ) { if( h >= 720 && w >= 720 ) {
@@ -276,11 +278,11 @@ class Florm {
   int count = 0;
   int currentFrame = 0;
 
-  void step(double time) {
+  void step(Canvas cv, double time) {
     // Browser.getWindow().getConsole().log( "erm" );
     if (worms.isEmpty) {
       // Browser.getWindow().getConsole().log("io");
-      drawStartMessage(cv!);
+      drawStartMessage(cv);
       /*if (timer == null) {
         cancelAnimationFrame(currentFrame);
       } else {
@@ -291,9 +293,14 @@ class Florm {
     }
     if (!pause) {
       //Context2d context = cv.getContext2d();
+      var remset = [];
       for (Worm worm in worms) {
-        worm.advance(cv!, w, h);
+        if (worm.advance(cv, w, h)) {
+          remset.add(worm);
+        }
       }
+      if (remset.isNotEmpty) debugPrint("removed ${remset.length} worms");
+      worms.removeAll(remset);
       if ((count++) % 50 == 0) {
         //timebox.setText((count / 50).toString());
       }
@@ -301,21 +308,8 @@ class Florm {
     }
   }
 
-  void cancelAnimationFrame(int id) {}
-  /*{
-		$wnd.cancelAnimationFrame(id);
-	}*/
-
-  int requestAnimationFrame() {
-    return 0;
-  }
-  /*{
-		return $wnd.requestAnimationFrame($wnd.step);
-	}*/
-
   double w = 0;
   double h = 0;
-  Canvas? cv;
   //Timer timer = null;
   var worms = <Worm>{};
   //HorizontalPanel hscore;
@@ -333,14 +327,15 @@ class Florm {
 		}
 	}*/
 
-  void startGame() {
+  void startGame(Canvas cv, double ww, double hh) {
     int ws = worms.length;
     if (ws == 0) {
       //playMusic();
 
-      worms.add(Worm.construct(
-          this, const Color(0x0000ff00), 'LEFT', 'RIGHT', 'LEFT', 'RIGHT'));
-      updateCoordinates(cv!, false);
+      var worm = Worm.construct(
+          this, const Color(0x0000ff00), 'LEFT', 'RIGHT', 'LEFT', 'RIGHT');
+      worms.add(worm);
+      updateCoordinates(cv, false, ww, hh);
 
       /*if (timer != null) {
         info.hide();
@@ -349,10 +344,10 @@ class Florm {
       }
       info.hide();*/
       //cv.setFocus(true);
-      currentFrame = requestAnimationFrame();
+      //currentFrame = requestAnimationFrame();
     } else if (ws == 1) {
-      Worm w = worms.first;
-      if (w.c == Colors.green) {
+      Worm worm = worms.first;
+      if (worm.c == Colors.green) {
         worms.add(Worm.construct(this, Colors.blue, 'z', 'x', 'Z', 'X'));
       } else {
         worms.add(Worm.construct(
@@ -374,22 +369,22 @@ class Florm {
     }
   }
 
-  void keyUp(String keyCode) {
+  void keyUp(Canvas cv, String keyCode) {
     keyset.remove(keyCode);
   }
 
-  void keyDown(String keycode) {
+  void keyDown(Canvas cv, String keycode) {
     if (keycode == ' ') {
       pause = !pause;
     } else if (keycode == "ESC") {
       //if (timer != null) timer.cancel();
       Set<Worm> wset = Set<Worm>.from(worms);
-      for (Worm w in wset) {
-        w.kill();
+      for (Worm worm in wset) {
+        worm.kill(w, h);
       }
       wset.clear();
     } else if (keycode == 'ENTER') {
-      startGame();
+      startGame(cv, w, h);
     } else {
       keyset.add(keycode);
     }
@@ -398,25 +393,25 @@ class Florm {
   var keyset = <String>{};
 
   void onKeyUp(KeyUpEvent event) {
-    keyUp(event.logicalKey.keyLabel);
+    //keyUp(event.logicalKey.keyLabel);
   }
 
   void onKeyDown(KeyDownEvent event) {
     var keycode = event.logicalKey.keyLabel;
-    keyDown(keycode);
+    //keyDown(keycode);
   }
 
   bool mousedown = false;
   bool touchdown = false;
   bool wastouched = false;
 
-  void start(double x, double y, double w, double h) {
+  void start(Canvas cv, double x, double y, double w, double h) {
     //playMusic();
 
     double angle = atan2(h - y, x - w / 2);
     worms.add(Worm.withAngle(this, const Color(0x0000ff00), "LEFT", "RIGHT",
-        "LEFT", "RIGHT", angle));
-    updateCoordinates(cv!, false);
+        "LEFT", "RIGHT", angle, w, h));
+    updateCoordinates(cv, false, w, h);
 
     /*if (timer != null) {
       info.hide();
@@ -425,12 +420,12 @@ class Florm {
     }
     info.hide();*/
     //cv.setFocus(true);
-    currentFrame = requestAnimationFrame();
+    //currentFrame = requestAnimationFrame();
   }
 
-  void mouseTouch(double x, double y) {
+  void mouseTouch(Canvas cv, double x, double y) {
     if (worms.isEmpty) {
-      start(x, y, w, h);
+      start(cv, x, y, w, h);
     } else {
       Worm? w;
       for (Worm wrm in worms) {
@@ -443,14 +438,14 @@ class Florm {
     }
   }
 
-  void onMouseDown(double x, double y) {
+  void onMouseDown(Canvas cv, double x, double y) {
     if (!wastouched) {
       mousedown = true;
 
       //int x = event.getX();
       //int y = event.getY();
 
-      mouseTouch(x, y);
+      mouseTouch(cv, x, y);
     } else
       wastouched = false;
   }
