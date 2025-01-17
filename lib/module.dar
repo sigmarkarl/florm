@@ -1,0 +1,524 @@
+void onModuleLoad() {
+		final Element donateEl = Document.get().getElementById("donate");
+		donateEl.removeFromParent();
+
+		final Widget mondesWidget;
+		final Widget lorconWidget;
+		final Widget luckWidget;
+		final Widget quatelWidget;
+		final Widget criangWidget;
+		final Widget deflecWidget;
+		final Widget dipillWidget;
+		final Widget extlifWidget;
+
+		bool nreq = init();
+
+		String fbuid = "";
+		NodeList<Element> nl = Document.get().getElementsByTagName("meta");
+		int i;
+		for (i = 0; i < nl.getLength(); i++) {
+			Element e = nl.getItem(i);
+			String prop = e.getAttribute("property");
+			if (prop.equals("fbuid")) {
+				// setUserId( e.getAttribute("content") );
+				fbuid = e.getAttribute("content");
+				break;
+			}
+		}
+
+		final Element mondesEl = Document.get().getElementById("mondes");
+		mondesEl.removeFromParent();
+		final Element lorconEl = Document.get().getElementById("lorcon");
+		lorconEl.removeFromParent();
+		final Element luckEl = Document.get().getElementById("luck");
+		luckEl.removeFromParent();
+		final Element quatelEl = Document.get().getElementById("quatel");
+		quatelEl.removeFromParent();
+		final Element criangEl = Document.get().getElementById("criang");
+		criangEl.removeFromParent();
+		final Element deflecEl = Document.get().getElementById("deflec");
+		deflecEl.removeFromParent();
+		final Element dipillEl = Document.get().getElementById("dipill");
+		dipillEl.removeFromParent();
+		final Element extlifEl = Document.get().getElementById("extlif");
+		extlifEl.removeFromParent();
+
+		if (fbuid != null) {
+			// offset = 120;
+			final Button mondesAnc = new Button("Buy");
+			mondesAnc.addClickHandler(new ClickHandler() {
+				void onClick(ClickEvent event) {
+					fbPay("mondes");
+				}
+			});
+			mondesWidget = mondesAnc;
+			final Button lorconAnc = new Button("Buy");
+			lorconAnc.addClickHandler(new ClickHandler() {
+				void onClick(ClickEvent event) {
+					fbPay("lorcon");
+				}
+			});
+			lorconWidget = lorconAnc;
+			final Button luckAnc = new Button("Buy");
+			luckAnc.addClickHandler(new ClickHandler() {
+				void onClick(ClickEvent event) {
+					fbPay("luck");
+				}
+			});
+			luckWidget = luckAnc;
+			final Button quatelAnc = new Button("Buy");
+			quatelAnc.addClickHandler(new ClickHandler() {
+				void onClick(ClickEvent event) {
+					fbPay("quatel");
+				}
+			});
+			quatelWidget = quatelAnc;
+			final Button criangAnc = new Button("Buy");
+			criangAnc.addClickHandler(new ClickHandler() {
+				void onClick(ClickEvent event) {
+					fbPay("criang");
+				}
+			});
+			criangWidget = criangAnc;
+			final Button deflecAnc = new Button("Buy");
+			deflecAnc.addClickHandler(new ClickHandler() {
+				void onClick(ClickEvent event) {
+					fbPay("deflec");
+				}
+			});
+			deflecWidget = deflecAnc;
+			final Button dipillAnc = new Button("Buy");
+			dipillAnc.addClickHandler(new ClickHandler() {
+				void onClick(ClickEvent event) {
+					fbPay("dipill");
+				}
+			});
+			dipillWidget = dipillAnc;
+			final Button extlifAnc = new Button("Buy");
+			extlifAnc.addClickHandler(new ClickHandler() {
+				void onClick(ClickEvent event) {
+					fbPay("extlif");
+				}
+			});
+			extlifWidget = extlifAnc;
+		} else {
+			console("eldor");
+
+			mondesEl.getStyle().setDisplay(Display.INLINE);
+			lorconEl.getStyle().setDisplay(Display.INLINE);
+			luckEl.getStyle().setDisplay(Display.INLINE);
+			quatelEl.getStyle().setDisplay(Display.INLINE);
+			criangEl.getStyle().setDisplay(Display.INLINE);
+			deflecEl.getStyle().setDisplay(Display.INLINE);
+			dipillEl.getStyle().setDisplay(Display.INLINE);
+			extlifEl.getStyle().setDisplay(Display.INLINE);
+
+			mondesWidget = new SimplePanel();
+			mondesWidget.getElement().appendChild(mondesEl);
+			lorconWidget = new SimplePanel();
+			lorconWidget.getElement().appendChild(lorconEl);
+			luckWidget = new SimplePanel();
+			luckWidget.getElement().appendChild(luckEl);
+			quatelWidget = new SimplePanel();
+			quatelWidget.getElement().appendChild(quatelEl);
+			criangWidget = new SimplePanel();
+			criangWidget.getElement().appendChild(criangEl);
+			deflecWidget = new SimplePanel();
+			deflecWidget.getElement().appendChild(deflecEl);
+			dipillWidget = new SimplePanel();
+			dipillWidget.getElement().appendChild(dipillEl);
+			extlifWidget = new SimplePanel();
+			extlifWidget.getElement().appendChild(extlifEl);
+		}
+		donateEl.getStyle().setDisplay(Display.INLINE);
+
+		final RootPanel rp = RootPanel.get("content");
+		Style st = rp.getElement().getStyle();
+
+		st.setMargin(0.0, Unit.PX);
+		st.setPadding(0.0, Unit.PX);
+		st.setBorderWidth(0.0, Unit.PX);
+		st.setBackgroundColor("#222222");
+
+		final VerticalPanel vp = new VerticalPanel();
+		vp.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		vp.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+		st = vp.getElement().getStyle();
+		st.setBackgroundColor("#333333");
+
+		// FocusPanel fp = new FocusPanel();
+		// fp.setWidth( "100%" );
+		// fp.setHeight( "100%" );
+		cv = Canvas.createIfSupported();
+		st = cv.getElement().getStyle();
+		st.setMargin(0.0, Unit.PX);
+		st.setPadding(0.0, Unit.PX);
+		st.setBorderWidth(0.0, Unit.PX);
+		cv.setWidth("100%");
+		cv.setHeight("100%");
+
+		vp.setWidth("100%");
+		vp.setHeight("100%");
+		// fp.add( cv );
+
+		worms = new HashSet<Worm>();
+		w = Window.getClientWidth() - adw;
+		h = Window.getClientHeight();
+		rp.setWidth(w + "px");
+		rp.setHeight(h + "px");
+
+		if (w * h <= 320 * 480) {
+			lorcon = true;
+			criang = true;
+			delay = 60;
+		} else
+			delay = 40;
+
+		// w = Window.getClientWidth();
+		// h = Window.getClientHeight();
+		updateCoordinates(cv, true);
+		Window.addResizeHandler(new ResizeHandler() {
+			void onResize(ResizeEvent event) {
+				int w = event.getWidth() - adw;
+				int h = event.getHeight();
+				resize(rp, w, h);
+			}
+		});
+
+		timebox = new TextBox();
+		timebox.setReadOnly(true);
+		timebox.setPixelSize(32, 10);
+		timebox.setSize("32px", "10px");
+
+		// requestAnimationFrame();
+		if (nreq) {
+			timer = new Timer() {
+				int count = 0;
+
+				void run() {
+					step(0);
+				}
+
+				void cancel() {
+					super.cancel();
+					count = 0;
+				}
+			};
+		}
+
+		String useragent = Window.Navigator.getUserAgent();
+		cv.addMouseDownHandler(this);
+		cv.addMouseUpHandler(this);
+		cv.addMouseMoveHandler(this);
+		cv.addTouchStartHandler(this);
+		cv.addTouchEndHandler(this);
+		cv.addTouchMoveHandler(this);
+
+		if (useragent.contains("MSIE")) {
+			ieSpec();
+		} else {
+			cv.addKeyDownHandler(this);
+			cv.addKeyUpHandler(this);
+		}
+
+		cv.setFocus(true);
+
+		// Style style;
+		HorizontalPanel hp = new HorizontalPanel();
+		// hp.getElement().getStyle().setColor("#ffffff");
+		hp.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		hp.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		// hp.setHeight("10px");
+		hp.setSpacing(10);
+
+		/*
+		 * Button spcredit = new Button("SP Credits"); spcredit.addClickHandler(
+		 * new ClickHandler() {
+		 * 
+		 * @Override public void onClick(ClickEvent event) { fbPay( "abc123" );
+		 * } });
+		 */
+
+		/*
+		 * <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+		 * <input type="hidden" name="cmd" value="_s-xclick"> <input
+		 * type="hidden" name="hosted_button_id" value="L4TC92APSZDHW"> <input
+		 * type="image"
+		 * src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"
+		 * border="0" name="submit"
+		 * alt="PayPal - The safer, easier way to pay online!"> <img alt=""
+		 * border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+		 * width="1" height="1"> </form>
+		 */
+
+		/*
+		 * <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
+		 * <input type="hidden" name="cmd" value="_s-xclick"> <input
+		 * type="hidden" name="hosted_button_id" value="8245UZK73CU5U"> <input
+		 * type="image"
+		 * src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif"
+		 * border="0" name="submit"
+		 * alt="PayPal - The safer, easier way to pay online!"> <img alt=""
+		 * border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif"
+		 * width="1" height="1"> </form>
+		 */
+
+		/*
+		 * FormPanel form = new FormPanel(); form.setAction(
+		 * "https://www.paypal.com/cgi-bin/webscr" ); form.setMethod(
+		 * FormPanel.METHOD_POST );
+		 * 
+		 * HorizontalPanel holder = new HorizontalPanel();
+		 * holder.setVerticalAlignment( HorizontalPanel.ALIGN_MIDDLE );
+		 * holder.setHorizontalAlignment( HorizontalPanel.ALIGN_CENTER );
+		 * 
+		 * Hidden cmd = new Hidden("cmd", "_s-xclick"); Hidden hosted_button_id
+		 * = new Hidden("hosted_button_id", "8245UZK73CU5U"); Image img = new
+		 * Image( "https://www.paypalobjects.com/en_US/i/scr/pixel.gif" );
+		 * img.setAltText(""); img.setWidth("1"); img.setHeight("1");
+		 * 
+		 * InputElement iel = Document.get().createImageInputElement();
+		 * iel.setName("submit"); iel.setSrc(
+		 * "https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" );
+		 * iel.setAlt( "PayPal - The safer, easier way to pay online!" );
+		 * 
+		 * SimplePanel imageinput = new SimplePanel();
+		 * imageinput.getElement().appendChild( iel );
+		 * 
+		 * holder.add( cmd ); holder.add( hosted_button_id ); holder.add(
+		 * imageinput ); holder.add( img ); form.add( holder );
+		 */
+
+		hscore = new HorizontalPanel();
+		hscore.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		hscore.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		hscore.setWidth("160px");
+		// hscore.setHeight("50px");
+
+		Label timelabel = new Label("Time:");
+		timelabel.getElement().getStyle().setColor("#eeeeee");
+		// timelabel.setHeight("50px");
+
+		HorizontalPanel coverpanel = new HorizontalPanel();
+		coverpanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		coverpanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		coverpanel.setSpacing(5);
+		coverpanel.setWidth("100%");
+		// coverpanel.setHeight("50px");
+
+		HorizontalPanel timepanel = new HorizontalPanel();
+		timepanel.setVerticalAlignment(HorizontalPanel.ALIGN_MIDDLE);
+		timepanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		timepanel.setWidth("150px");
+		// timepanel.setHeight("50px");
+
+		timepanel.add(timelabel);
+		timepanel.add(timebox);
+
+		plus = Document.get().createElement("g:plusone");
+		plus.setAttribute("size", "small");
+
+		like = Document.get().createElement("fb:like");
+		like.setAttribute("width", "200");
+		like.setAttribute("font", "arial");
+		like.setAttribute("layout", "button_count");
+		like.setAttribute("colorscheme", "dark");
+		like.setAttribute("send", "true");
+		like.setAttribute("href", "http://apps.facebook.com/webwormgame");
+		like.setId("fblike");
+
+		login = loginButton();
+
+		sp = new SimplePanel();
+		splus = new SimplePanel();
+
+		SimplePanel form = new SimplePanel();
+		form.getElement().appendChild(donateEl);
+
+		hp.add(sp);
+		// hp.add( spcredit );
+		hp.add(power);
+		hp.add(form);
+		hp.add(splus);
+
+		/*
+		 * final Element ads = Document.get().getElementById("ads");
+		 * ads.removeFromParent(); if( fbuid == null ) { if( ads != null ) {
+		 * popup = new PopupPanel(); Style style =
+		 * popup.getElement().getStyle(); style.setBorderWidth(0.0, Unit.PX);
+		 * style.setMargin(0.0, Unit.PX);
+		 * 
+		 * //final SimplePanel spopup = new SimplePanel();
+		 * //spopup.setWidth("160px"); //spopup.setHeight("600px");
+		 * 
+		 * //<script type="text/javascript"
+		 * //src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+		 * //</script> //popup.add( spopup );
+		 * 
+		 * popup.getElement().appendChild( ads ); popup.setPopupPosition(0,
+		 * (h-600)/2); popup.setPixelSize(156, 594);
+		 * 
+		 * if( h >= 720 ) { popup.show(); popup.setSize(156+"px", 594+"px"); }
+		 * 
+		 * *popup.setPopupPositionAndShow( new PositionCallback() {
+		 * 
+		 * @Override public void setPosition(int offsetWidth, int offsetHeight)
+		 * { popup.setPopupPosition(0, (h-600)/2); popup.setPixelSize(156, 594);
+		 * *setGadsPars(); ScriptElement adscript =
+		 * Document.get().createScriptElement();
+		 * adscript.setType("text/javascript");
+		 * adscript.setSrc("http://pagead2.googlesyndication.com/pagead/show_ads.js"
+		 * ); adscript.setAttribute("async", "true");
+		 * spopup.getElement().appendChild( adscript ); } });* } }
+		 */
+		// new fbInit(fbuid);
+		// fetchHighScores();
+
+		String id = "facebook-jssdk";
+		ScriptElement se = Document.get().createScriptElement();
+		se.setId(id);
+		se.setAttribute("async", "true");
+		se.setSrc("//connect.facebook.net/en_US/all.js");
+		Document.get().getElementById("fb-root").appendChild(se);
+
+		// sp.getElement().appendChild( e );
+		// sp.setWidth("170px");
+
+		splus.getElement().appendChild(plus);
+
+		// splus.setWidth("100px");
+
+		// HorizontalPanel hsp = new HorizontalPanel();
+		// hsp.setSpacing(2);
+		// hsp.add( sp );
+		// hsp.add( splus );
+
+		// coverpanel.add( hsp );
+		// coverpanel.add( form );
+		coverpanel.add(hscore);
+		coverpanel.add(timepanel);
+
+		/*
+		 * if( fbuid != null ) { SimplePanel adsPanel = new SimplePanel();
+		 * adsPanel.getElement().appendChild( ads ); adsPanel.setPixelSize( 728,
+		 * 90 ); adsPanel.setSize("728px", "90px"); vp.add( adsPanel ); offset =
+		 * 120; }
+		 */
+		vp.add(coverpanel);
+		vp.add(cv);
+		// vp.add( hp );
+
+		HorizontalPanel links = new HorizontalPanel();
+		links.setSpacing(10);
+
+		Anchor contact = new Anchor("huldaeggerts@gmail.com");
+		contact.setHref("mailto:huldaeggerts@gmail.com");
+		links.add(contact);
+
+		HTML html = new HTML("|");
+		links.add(html);
+
+		if (fbuid == null) {
+			Anchor smas = new Anchor("suggestadate.appspot.com");
+			smas.setHref("http://suggestadate.appspot.com");
+			links.add(smas);
+
+			html = new HTML("|");
+			links.add(html);
+
+			Anchor fast = new Anchor("apps.facebook.com/webwormgame");
+			fast.setHref("https://apps.facebook.com/webwormgame");
+			links.add(fast);
+		} else {
+			Anchor smas = new Anchor("apps.facebook.com/suggestdate");
+			smas.setHref("https://apps.facebook.com/suggestdate");
+			smas.setTarget("_blank");
+			links.add(smas);
+
+			html = new HTML("|");
+			links.add(html);
+
+			Anchor fast = new Anchor("webwormgame.appspot.com");
+			fast.setHref("http://webwormgame.appspot.com");
+			fast.setTarget("_blank");
+			links.add(fast);
+		}
+
+		info = new PopupPanel();
+		VerticalPanel infov = new VerticalPanel();
+		infov.setHorizontalAlignment(VerticalPanel.ALIGN_CENTER);
+		infov.setVerticalAlignment(VerticalPanel.ALIGN_MIDDLE);
+		infov.setSpacing(15);
+		infohtml = new HTML();
+
+		Button play = new Button();
+		play.setText("Play");
+		play.addClickHandler(new ClickHandler() {
+			void onClick(ClickEvent event) {
+				startGame();
+			}
+		});
+
+		final RadioButton seren = new RadioButton("faudio", "Worm-serenade");
+		final RadioButton rhaps = new RadioButton("faudio", "Worm-rhapsody");
+		final RadioButton etude = new RadioButton("faudio", "Worm-etude");
+		final RadioButton faudio = new RadioButton("faudio", "No eff-ing music");
+		seren.addClickHandler(new ClickHandler() {
+			void onClick(ClickEvent event) {
+				audio.setEnabled(true);
+				audio.setSrc("flabb2.webm");
+			}
+		});
+		rhaps.addClickHandler(new ClickHandler() {
+			void onClick(ClickEvent event) {
+				audio.setEnabled(true);
+				audio.setSrc("hey.webm");
+			}
+		});
+		etude.addClickHandler(new ClickHandler() {
+			void onClick(ClickEvent event) {
+				audio.setEnabled(true);
+				audio.setSrc("etude.webm");
+			}
+		});
+		faudio.addClickHandler(new ClickHandler() {
+			void onClick(ClickEvent event) {
+				audio.setEnabled(false);
+			}
+		});
+
+		HorizontalPanel hpaudio = new HorizontalPanel();
+		hpaudio.setSpacing(5);
+		hpaudio.add(seren);
+		hpaudio.add(rhaps);
+		hpaudio.add(etude);
+		hpaudio.add(faudio);
+
+		HTML musicmessage = new HTML("Coming soon, Worm-valz and Worm-toccata and fuge. <br>If you like the game soundtrack, stay tuned!");
+
+		infov.add(play);
+		infov.add(infohtml);
+		infov.add(hp);
+		infov.add(hpaudio);
+		infov.add(musicmessage);
+		infov.add(links);
+		info.add(infov);
+
+		audio = Audio.createIfSupported();
+		audio.setSrc("flabb2.webm");
+		audio.setLoop(true);
+		audio.getAudioElement().setAttribute("loop", "true");
+		coverpanel.add( audio );
+		//hpaudio.add( audio );
+
+		/*
+		 * setGadsPars(); ScriptElement adscript =
+		 * Document.get().createScriptElement();
+		 * adscript.setType("text/javascript");
+		 * adscript.setSrc("http://pagead2.googlesyndication.com/pagead/show_ads.js"
+		 * ); adscript.setAttribute("async", "true");
+		 * RootPanel.get("fb-root").getElement().appendChild( adscript );
+		 */
+
+		rp.add(vp);
+	}
