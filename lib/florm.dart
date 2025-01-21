@@ -27,7 +27,7 @@ class Florm {
   double applex = 0;
   double appley = 0;
   double appler = 16.0;
-  bool increment = false;
+  bool increment = true;
 
   int setApple(Canvas context, double w, double h) {
     applex = Random.secure().nextDouble() * (w - appler * 2.0) + appler;
