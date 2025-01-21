@@ -106,11 +106,11 @@ class Florm {
   }
 
   void killall() {
-    var tmpset = Set<Worm>.from(worms);
+    /*var tmpset = Set<Worm>.from(worms);
     for (Worm worm in tmpset) {
       worm.kill(w, h);
     }
-    tmpset.clear();
+    tmpset.clear();*/
   }
 
   int offset = 30;
@@ -128,8 +128,8 @@ class Florm {
 			cv.setCoordinateSpaceHeight(context.getCanvas().getHeight());*/
     }
 
-    context.drawRect(Rect.fromLTWH(0, 0, w, h - offset),
-        Paint()..color = const Color(0x00000000));
+    //context.drawRect(Rect.fromLTWH(0, 0, w, h - offset),
+    //    Paint()..color = const Color(0x00000000));
 
     for (Worm w in worms) {
       var xs = w.xs;
@@ -296,7 +296,7 @@ class Florm {
         }
       }
       if (remset.isNotEmpty) debugPrint("removed ${remset.length} worms");
-      worms.removeAll(remset);
+      //worms.removeAll(remset);
       if ((count++) % 50 == 0) {
         //timebox.setText((count / 50).toString());
       }
