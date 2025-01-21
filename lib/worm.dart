@@ -73,7 +73,7 @@ class Worm {
   void init(
       double angle, bool lorcon, bool criang, bool dipill, double w, double h) {
     r = 5.0;
-    l = 24;
+    l = 240;
     i = 0;
 
     tx = -1.0;
@@ -92,9 +92,9 @@ class Worm {
     }
 
     if (lorcon) {
-      s = 6.5;
+      s = 0.65;
     } else {
-      s = 8.5;
+      s = 0.85;
     }
 
     score = 0;
@@ -325,16 +325,16 @@ class Worm {
               a = -a;
             }
           } else {
-            l = 0;
-            florm.countLiving();
+            //l = 0;
+            //florm.countLiving();
           }
         } else if (blue != 0 || green != 0 || red != 0) {
           if (extlif) {
             extlif = false;
             draw(context, x, y, r, c, const Color(0x00111111));
           } else {
-            l = 0;
-            florm.countLiving();
+            //l = 0;
+            //florm.countLiving();
           }
         } else {
           draw(context, x, y, r, c, const Color(0x00111111));
@@ -347,7 +347,7 @@ class Worm {
   void draw(Canvas context, double tx, double ty, double tr, Color fillcolor,
       Color strokecolor) {
     var path = Path();
-    path.addOval(Rect.fromCircle(center: Offset(tx, ty), radius: tr));
+    path.addOval(Rect.fromCircle(center: Offset(tx + 100, -ty), radius: tr));
     path.close();
     var paint = Paint();
     paint.color = fillcolor;

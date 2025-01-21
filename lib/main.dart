@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    duration = const Duration(milliseconds: 10000);
+    duration = const Duration(milliseconds: 2000);
     animationController = AnimationController(vsync: this, duration: duration);
     //_waveColor = widget.waveColor ?? Colors.lightBlueAccent;
     animationController!.repeat();
