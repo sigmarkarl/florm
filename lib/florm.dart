@@ -1,5 +1,7 @@
 import 'dart:core';
 import 'dart:math';
+import 'dart:ui';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -16,6 +18,9 @@ class Florm {
   /// service.
   //final GreetingServiceAsync greetingService = GWT
   //		.create(GreetingService.class);
+
+  Picture? lastPicture;
+  ui.Image? image;
 
   Florm();
 
@@ -328,8 +333,8 @@ class Florm {
     if (ws == 0) {
       //playMusic();
 
-      var worm = Worm.construct(
-          this, const Color(0x0000ff00), 'LEFT', 'RIGHT', 'LEFT', 'RIGHT');
+      var worm =
+          Worm.construct(this, Colors.green, 'LEFT', 'RIGHT', 'LEFT', 'RIGHT');
       worms.add(worm);
       updateCoordinates(cv, false, ww, hh);
 
