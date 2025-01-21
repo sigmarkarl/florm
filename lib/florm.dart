@@ -6,18 +6,14 @@ import 'package:flutter/services.dart';
 import 'worm.dart';
 
 class Florm {
-  /**
-	 * The message displayed to the user when the server cannot be reached or
-	 * returns an error.
-	 */
+  /// The message displayed to the user when the server cannot be reached or
+  /// returns an error.
   // ignore: constant_identifier_names
   static const String SERVER_ERROR =
       "An error occurred while attempting to contact the server. Please check your network connection and try again.";
 
-  /**
-	 * Create a remote service proxy to talk to the server-side Greeting
-	 * service.
-	 */
+  /// Create a remote service proxy to talk to the server-side Greeting
+  /// service.
   //final GreetingServiceAsync greetingService = GWT
   //		.create(GreetingService.class);
 
@@ -446,8 +442,9 @@ class Florm {
       //int y = event.getY();
 
       mouseTouch(cv, x, y);
-    } else
+    } else {
       wastouched = false;
+    }
   }
 
   void onMouseMove(double x, double y) {
