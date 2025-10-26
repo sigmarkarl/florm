@@ -125,9 +125,9 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     florm.increment = true;
                   } else {
                     // Transform coordinates to game space
-                    // Game draws at: Offset(x + 100, -y)
-                    // So to convert: gameX = screenX - 100, gameY = -screenY
-                    double gameX = details.localPosition.dx - 100;
+                    // Game uses Y inverted (negative values)
+                    // X coordinates must be >= 0 (tx >= 0 check in worm.dart:230)
+                    double gameX = details.localPosition.dx;
                     double gameY = -details.localPosition.dy;
 
                     // Direct worm to tapped location
@@ -140,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               onPanUpdate: (details) {
                 setState(() {
                   // Transform coordinates for smooth control
-                  double gameX = details.localPosition.dx - 100;
+                  double gameX = details.localPosition.dx;
                   double gameY = -details.localPosition.dy;
 
                   // Direct worm to dragged location
