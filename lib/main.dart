@@ -114,28 +114,39 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: GestureDetector(
-          onTapDown: (details) {
-            setState(() {
-              if (florm.worms.isEmpty) {
-                // Start the game on first tap
-                florm.increment = true;
-              } else {
-                // Direct worm to tapped location
-                for (var worm in florm.worms) {
-                  worm.setTarget(details.localPosition.dx, details.localPosition.dy);
-                }
-              }
-            });
-          },
-          onPanUpdate: (details) {
-            setState(() {
-              // Direct worm to dragged location for smooth control
-              for (var worm in florm.worms) {
-                worm.setTarget(details.localPosition.dx, details.localPosition.dy);
-              }
-            });
-          },
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final screenHeight = constraints.maxHeight;
+            return GestureDetector(
+              onTapDown: (details) {
+                setState(() {
+                  if (florm.worms.isEmpty) {
+                    // Start the game on first tap
+                    florm.increment = true;
+                  } else {
+                    // Transform coordinates: game uses inverted Y and offset X
+                    double gameX = details.localPosition.dx - 100;
+                    double gameY = screenHeight - details.localPosition.dy;
+
+                    // Direct worm to tapped location
+                    for (var worm in florm.worms) {
+                      worm.setTarget(gameX, gameY);
+                    }
+                  }
+                });
+              },
+              onPanUpdate: (details) {
+                setState(() {
+                  // Transform coordinates for smooth control
+                  double gameX = details.localPosition.dx - 100;
+                  double gameY = screenHeight - details.localPosition.dy;
+
+                  // Direct worm to dragged location
+                  for (var worm in florm.worms) {
+                    worm.setTarget(gameX, gameY);
+                  }
+                });
+              },
           /*onHorizontalDragStart: (detail) {
             _x = detail.globalPosition.dx;
           },*/
@@ -252,15 +263,17 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             },
           ),*/
 
-          child: AnimatedBuilder(
-            animation: animationController!,
-            builder: (BuildContext context, Widget? child) {
-              return CustomPaint(
-                painter: FlormPainter(florm),
-                size: const Size(1024, 1024),
-              );
-            },
-          ),
+              child: AnimatedBuilder(
+                animation: animationController!,
+                builder: (BuildContext context, Widget? child) {
+                  return CustomPaint(
+                    painter: FlormPainter(florm),
+                    size: Size(constraints.maxWidth, constraints.maxHeight),
+                  );
+                },
+              ),
+            );
+          },
         ),
       ),
       // Removed floating action button - tap screen to start/control worm
