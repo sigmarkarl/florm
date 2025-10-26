@@ -124,9 +124,11 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     // Start the game on first tap
                     florm.increment = true;
                   } else {
-                    // Transform coordinates: game uses inverted Y and offset X
+                    // Transform coordinates to game space
+                    // Game draws at: Offset(x + 100, -y)
+                    // So to convert: gameX = screenX - 100, gameY = -screenY
                     double gameX = details.localPosition.dx - 100;
-                    double gameY = screenHeight - details.localPosition.dy;
+                    double gameY = -details.localPosition.dy;
 
                     // Direct worm to tapped location
                     for (var worm in florm.worms) {
@@ -139,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 setState(() {
                   // Transform coordinates for smooth control
                   double gameX = details.localPosition.dx - 100;
-                  double gameY = screenHeight - details.localPosition.dy;
+                  double gameY = -details.localPosition.dy;
 
                   // Direct worm to dragged location
                   for (var worm in florm.worms) {
